@@ -5,32 +5,32 @@ import cors from 'cors'
 import movieRoutes from "./routes/movieRoutes.js"
 
 const port = process.env.PORT || 4000
-dotenv.config({path:'./config.env'})
+dotenv.config({ path: './config.env' })
 
 
 const app = express()
-app.use('/uploads', express.static('uploads'))
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
 app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'))
 
 
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.DATABASE)
-    .then((res) => { console.log("> database connected") })
-    .catch((err) => console.log("failed to connect database", err))
+  .then((res) => { console.log("> database connected") })
+  .catch((err) => console.log("failed to connect database", err))
 
 // Routes
-app.use("/movieData",movieRoutes)
+app.use("/movieData", movieRoutes)
 
 app.use((error, req, res, next) => {
   console.log("error", error.field)
 })
 
 app.get('/login', (req, res) => {
-    
-   res.status(200).json({loginDetails:{email:process.env.EMAIL,password:process.env.PASSWORD}})
+
+  res.status(200).json({ loginDetails: { email: process.env.EMAIL, password: process.env.PASSWORD } })
 })
 app.listen(port, () => {
-    console.log("server is running on " + port)
+  console.log("server is running on " + port)
 })
